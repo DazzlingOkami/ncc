@@ -112,16 +112,15 @@ int main(int argc, char *argv[]){
         }
         else if(ret == 0){
             if(kbhit()){
-                gets(recv_buf);
+                fgets(recv_buf, BUF_SIZE - 2, stdin);
                 ret = strlen(recv_buf);
                 if(ret){
-                    send(sockfd, recv_buf, ret, 0);
                     if(crlf_enable){
-                        send(sockfd, "\r\n", 2, 0);
+                        recv_buf[ret - 1] = '\0';
+                        strcat(recv_buf, "\r\n");
+                        ret++;
                     }
-                    else{
-                        send(sockfd, "\n", 1, 0);
-                    }
+                    send(sockfd, recv_buf, ret, 0);
                 }
             }
         }
