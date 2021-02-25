@@ -45,15 +45,6 @@ int is_ip_format(const char *str){
     return 1;
 }
 
-int is_netport(const char *str){
-    int port;
-    int ret = sscanf(str, "%d", &port);
-    if(ret != 1 || port < 0){
-        return 0;
-    }
-    return port;
-}
-
 int main(int argc, char *argv[]){
     const char *ip = NULL;
     int port = 0;
@@ -62,8 +53,8 @@ int main(int argc, char *argv[]){
         if(is_ip_format(argv[i])){
             ip = argv[i];
         }
-        else if(is_netport(argv[i])){
-            port = is_netport(argv[i]);
+        else if(atoi(argv[i]) > 0){
+            port = atoi(argv[i]);
         }
         else if(strcmp(argv[i], "-c") == 0){
             crlf_enable = 1;
