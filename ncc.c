@@ -49,6 +49,9 @@ int main(int argc, char *argv[]){
     const char *ip = NULL;
     int port = 0;
     uint8_t crlf_enable = 0;
+    #ifdef GAPING_SECURITY_HOLE
+    const char *prog = NULL;
+    #endif
     for(int i = 1; i < argc; i++){
         if(is_ip_format(argv[i])){
             ip = argv[i];
@@ -59,6 +62,12 @@ int main(int argc, char *argv[]){
         else if(strcmp(argv[i], "-c") == 0){
             crlf_enable = 1;
         }
+        #ifdef GAPING_SECURITY_HOLE
+        else if(strcmp(argv[i], "-e") == 0){
+            i++;
+            prog = argv[i];
+        }
+        #endif
         else{
             fprintf(stderr, "invalid option %s\r\n", argv[i]);
         }
@@ -87,6 +96,15 @@ int main(int argc, char *argv[]){
         fprintf(stderr, "can't connect\r\n");
         return 0;
     }
+
+    #ifdef GAPING_SECURITY_HOLE
+    if(prog){
+        extern BOOL doexec(SOCKET ClientSocket, const char *prgm);
+        doexec(sockfd, prog);
+        WSACleanup();
+        return 0;
+    }
+    #endif
 
     struct fd_set fds;
     struct timeval timeout={0, 50};

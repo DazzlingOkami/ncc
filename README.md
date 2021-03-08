@@ -4,3 +4,4 @@ ncc is nc(Netcat) subset, only support TCP protocol. Netcat is great tool, but i
 # usage
 ncc ip port [-c]
 -c  :   send CRLF instead of just LF
+-e prog : inbound program to exec
